@@ -1,0 +1,4 @@
+[submodule "mongoshrc"]
+	path = mongoshrc
+	url = https://git3.nexdev.net/l1/database/mongoshrc.git
+	branch = main
