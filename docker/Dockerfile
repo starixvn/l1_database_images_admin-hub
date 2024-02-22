@@ -4,7 +4,7 @@ ARG GID=403
 
 RUN groupadd \
         --system \
-        --gid 403 \
+        --gid ${GID} \
         -- admin \
  && useradd \
         --no-log-init \
@@ -15,6 +15,7 @@ RUN groupadd \
         --shell /bin/bash \
         --key UMASK=007 \
         --key HOME_MODE=0770 \
+        --password '*' \
         -- admin \
  && chmod 2770 /home/admin \
  && install \
@@ -34,6 +35,29 @@ RUN wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc \
 RUN apt update \
  && apt install --yes mongodb-mongosh-shared-openssl3
 
+FROM base AS mongoshrc
+ARG UID=40312
+ARG GID=403
+COPY mongoshrc /mongoshrc
+RUN chown -R ${UID}:${GID} /mongoshrc \
+ && find /mongoshrc -type d -exec chmod 550 {} \; \
+ && find /mongoshrc -type f -exec chmod 440 {} \;
+
+FROM base AS home-admin
+ARG UID=40312
+ARG GID=403
+COPY home-admin /home-admin
+RUN chown -R ${UID}:${GID} /home-admin \
+ && find /home-admin -type d -exec chmod 550 {} \; \
+ && find /home-admin -type f -exec chmod 440 {} \;
+
+FROM base AS home-root
+COPY home-root /home-root
+RUN chown -R 0:0 /home-root \
+ && find /home-root -type d -exec chmod 550 {} \; \
+ && find /home-root -type f -exec chmod 440 {} \;
+
+# Main image
 FROM base
 ARG UID=40312
 ARG GID=403
@@ -50,21 +74,21 @@ RUN apt update \
 COPY --from=mongosh /usr/bin/mongosh /usr/bin/mongosh
 COPY --from=mongosh /usr/lib/mongosh_crypt_v1.so /usr/lib/mongosh_crypt_v1.so
 
+COPY --from=mongoshrc /mongoshrc /mongoshrc
+
+COPY --from=home-admin /home-admin/ /home/admin/
+COPY --from=home-root /home-root/ /root/
+
+COPY --chmod=400 hostkey/* /etc/ssh/
 COPY --chmod=444 sshd_config.d/* /etc/ssh/sshd_config.d/
 
-COPY --chown=0:0 --chmod=440 home/.mongodb/mongosh/config /root/.mongodb/mongosh/config
+COPY --chown=${UID}:${GID} --chmod=550 docker/docker-entrypoint.sh /docker-entrypoint.sh
 
-COPY --chown=${UID}:${GID} --chmod=550 docker-entrypoint.sh /docker-entrypoint.sh
-COPY --chown=${UID}:${GID} --chmod=440 mongoshrc /mongoshrc
+RUN ln -s /dev/null /root/.bash_history \
+ && ln -s /dev/null /home/admin/.bash_history \
+ && ln -s /dev/null .mongodb/mongosh/mongosh_repl_history
 
-COPY --chown=${UID}:${GID} --chmod=440 home/.mongodb/mongosh/config .mongodb/mongosh/config
-COPY --chown=${UID}:${GID} --chmod=440 home/.ssh/authorized_keys .ssh/authorized_keys
-COPY --chown=${UID}:${GID} --chmod=440 home/.mongoshrc.js .mongoshrc.js
-
-RUN ln -s /dev/null .bash_history \
- && ln -s /dev/null .mongodb/mongosh
-
-VOLUME [ "/repo", "/mongoshrc" ]
+VOLUME [ "/repo", "/mongoshrc/modules/configs" ]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/usr/sbin/sshd", "-d", "-D"]
+CMD ["/usr/sbin/sshd", "-D"]

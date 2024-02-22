@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "submodule:update": " git submodule update --init --recursive --remote",
+        "docker:test:build": "docker build --file docker/Dockerfile --tag hub.lumigame.com/ldb/admin-hub:test -- .",
+        "docker:test:stop": "docker stop AdminHub",
+        "docker:test:start": "docker run -d --rm -v ./tests/docker:/mongoshrc/modules/configs --name AdminHub hub.lumigame.com/ldb/admin-hub:test",
+        "docker:test": "pnpm docker:test:build && pnpm docker:test:stop && pnpm docker:test:start"
+    }
+}
