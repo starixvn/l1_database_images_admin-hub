@@ -4,7 +4,7 @@ set -x
 REGISTRY_URL=hub.lumigame.com
 IMAGE_NAME=admin-hub
 IMAGE_MINOR_VERSION=1.0
-IMAGE_PATCH_VERSION=1.0.2
+IMAGE_PATCH_VERSION=1.0.3
 
 docker build \
     --file docker/Dockerfile \
@@ -23,3 +23,5 @@ for UBUNTU_DISTRO in focal jammy; do
 done
 
 docker push --all-tags ${REGISTRY_URL}/ldb/${IMAGE_NAME}
+
+git reset HEAD -- . && git add . && git commit -m "chore(publish): \`${IMAGE_NAME}\` - ${IMAGE_PATCH_VERSION}"
