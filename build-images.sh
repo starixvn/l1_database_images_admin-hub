@@ -24,4 +24,12 @@ done
 
 docker push --all-tags ${REGISTRY_URL}/ldb/${IMAGE_NAME}
 
-git reset HEAD -- . && git add . && git commit -m "chore(publish): \`${IMAGE_NAME}\` - ${IMAGE_PATCH_VERSION}"
+git reset HEAD -- . \
+    && git add . \
+    && git commit -m "chore(publish): \`${IMAGE_NAME}:${IMAGE_PATCH_VERSION}\`"
+
+git push origin --delete "${IMAGE_MINOR_VERSION}"; \
+    git tag -d "${IMAGE_MINOR_VERSION}"; \
+    git tag -s "${IMAGE_MINOR_VERSION}" -m ""; \
+    git tag -s "${IMAGE_PATCH_VERSION}" -m ""; \
+    git push origin "${IMAGE_MINOR_VERSION}" "${IMAGE_PATCH_VERSION}"
