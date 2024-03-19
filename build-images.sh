@@ -30,6 +30,8 @@ git reset HEAD -- . \
 
 git push origin --delete "${IMAGE_MINOR_VERSION}"; \
     git tag -d "${IMAGE_MINOR_VERSION}"; \
-    git tag -s "${IMAGE_MINOR_VERSION}" -m ""; \
-    git tag -s "${IMAGE_PATCH_VERSION}" -m ""; \
-    git push origin "${IMAGE_MINOR_VERSION}" "${IMAGE_PATCH_VERSION}"
+    git tag -s "${IMAGE_MINOR_VERSION}" -m ""
+git push origin --delete "${IMAGE_PATCH_VERSION}"; \
+    git tag -d "${IMAGE_PATCH_VERSION}"; \
+    git tag -s "${IMAGE_PATCH_VERSION}" -m ""
+git push origin "${IMAGE_MINOR_VERSION}" "${IMAGE_PATCH_VERSION}"
