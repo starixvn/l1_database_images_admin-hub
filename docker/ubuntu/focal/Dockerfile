@@ -67,7 +67,7 @@ RUN apt update \
  && apt upgrade --yes \
  && apt install --yes \
         --no-install-recommends \
-        -- openssh-server ca-certificates \
+        -- openssh-server ca-certificates tmux \
  && rm -r /var/lib/apt/lists \
  && mkdir /run/sshd
 

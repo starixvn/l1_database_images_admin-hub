@@ -49,13 +49,13 @@ ARG GID=403
 COPY home-admin /home-admin
 RUN chown -R ${UID}:${GID} /home-admin \
  && find /home-admin -type d -exec chmod 550 {} \; \
- && find /home-admin -type f -exec chmod 440 {} \;
+ && find /home-admin -type f -exec chmod o= {} \;
 
 FROM base AS home-root
 COPY home-root /home-root
 RUN chown -R 0:0 /home-root \
  && find /home-root -type d -exec chmod 550 {} \; \
- && find /home-root -type f -exec chmod 440 {} \;
+ && find /home-root -type f -exec chmod o= {} \;
 
 # Main image
 FROM base
@@ -67,7 +67,7 @@ RUN apt update \
  && apt upgrade --yes \
  && apt install --yes \
         --no-install-recommends \
-        -- openssh-server ca-certificates \
+        -- openssh-server ca-certificates tmux \
  && rm -r /var/lib/apt/lists \
  && mkdir /run/sshd
 
