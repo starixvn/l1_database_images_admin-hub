@@ -1,10 +1,10 @@
-!#/bin/bash
+#!/bin/bash
 set -x
 
 REGISTRY_URL=hub.lumigame.com
 IMAGE_NAME=admin-hub
 IMAGE_MINOR_VERSION=1.1
-IMAGE_PATCH_VERSION=1.1.0
+IMAGE_PATCH_VERSION=1.1.1
 
 docker build \
     --file docker/Dockerfile \
