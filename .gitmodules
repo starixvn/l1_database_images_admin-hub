@@ -1,0 +1,13 @@
+[submodule "mongoshrc"]
+	path = mongoshrc
+	url = https://git3.nexdev.net/l1/database/mongoshrc.git
+	branch = main
+[submodule "home-admin/.tmux/plugins/tpm"]
+	path = home-admin/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "home-admin/.tmux/plugins/tmux-sensible"]
+	path = home-admin/.tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible
+[submodule "home-admin/.tmux/plugins/catppuccin-tmux"]
+	path = home-admin/.tmux/plugins/catppuccin-tmux
+	url = https://github.com/dreamsofcode-io/catppuccin-tmux
