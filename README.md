@@ -1,5 +1,20 @@
 # AdminHub
 
+## Develop AdminHub
+
+After pulling this repository with
+
+```bash
+git clone https://git3.nexdev.net/l1/database/images/admin-hub.git
+```
+
+You need to init submodule by issuing the following command
+
+```bash
+cd admin-hub
+git submodule update --init
+```
+
 ## Deploy AdminHub
 
 ### Start AdminHub
@@ -17,24 +32,25 @@ docker run \
 ```
 
 or `docker-compose.yml`
+
 ```yml
 services:
-  admin-hub:
-    image: hub-old.lumigame.com/ldb/admin-hub:latest
-    container_name: AdminHub
-    hostname: AdminHub
-    restart: always
-    network_mode: host
-    volumes:
-      - ./configs/mongoshrc/config.js:/mongoshrc/modules/configs/config.js:ro
-      - ./configs/authorized_keys:/home/admin/.ssh/authorized_keys:ro
+    admin-hub:
+        image: hub-old.lumigame.com/ldb/admin-hub:latest
+        container_name: AdminHub
+        hostname: AdminHub
+        restart: always
+        network_mode: host
+        volumes:
+            - ./configs/mongoshrc/config.js:/mongoshrc/modules/configs/config.js:ro
+            - ./configs/authorized_keys:/home/admin/.ssh/authorized_keys:ro
 ```
 
 ### Configure AdminHub
 
 #### `./configs/mongoshrc/config.js`
-Contains information of initial connections.
 
+Contains information of initial connections.
 
 ## Connect to AdminHub
 
