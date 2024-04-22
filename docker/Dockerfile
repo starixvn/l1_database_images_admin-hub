@@ -64,9 +64,6 @@ ARG GID=403
 
 WORKDIR /home/admin
 RUN apt update \
-    && apt upgrade -y \
-    && rm -rf /var/lib/apt/lists/*
-RUN apt update \
     && apt upgrade --yes \
     && apt install --yes \
     --no-install-recommends \
