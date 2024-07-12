@@ -22,7 +22,7 @@ RUN groupadd \
     --directory \
     --mode 2770 \
     --owner ${UID} \
-    --group ${UID} \
+    --group ${GID} \
     -- /repo
 
 FROM base AS mongosh
@@ -86,7 +86,7 @@ COPY --chown=${UID}:${GID} --chmod=550 docker/docker-entrypoint.sh /docker-entry
 
 RUN ln -s /dev/null /root/.bash_history \
     && ln -s /dev/null /home/admin/.bash_history \
-    && ln -s /dev/null .mongodb/mongosh/mongosh_repl_history
+    && ln -s /dev/null /home/admin/.mongodb/mongosh/mongosh_repl_history
 
 VOLUME [ "/repo", "/mongoshrc/modules/configs" ]
 
